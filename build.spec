@@ -24,6 +24,7 @@ if not STATIC_DIR.exists():
 datas = [
     (str(STATIC_DIR), "static"),  # 将 dist 映射到 _internal/static
     (str(BASE_DIR / "openapi.json"), "."),
+    (str(BASE_DIR / "migrations"), "migrations"),
 ]
 
 # 修复: 显式复制 tortoise-orm 的元数据，解决 importlib.metadata.PackageNotFoundError
