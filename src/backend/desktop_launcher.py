@@ -5,43 +5,42 @@ import time
 import webbrowser
 from pathlib import Path
 
+# --- 环境预配置 (必须在导入 app/settings 前执行) ---
+if getattr(sys, "frozen", False):
+    # 1. 设置默认生产环境 (允许外部 env 覆盖)
+    os.environ.setdefault("ENVIRONMENT", "production")
+    os.environ.setdefault("DEBUG", "false")
+
+    # 2. 配置静态文件路径
+    # PyInstaller 单目录模式: 资源在 sys.executable 同级或 _internal
+    # 我们的 spec 配置将 dist 复制到了 static 目录
+    base_dir = Path(sys.executable).parent
+    static_dir = base_dir / "static"
+
+    # 告诉 main.py 静态文件在哪里
+    os.environ["STATIC_FILES_DIR"] = str(static_dir.resolve())
+    print(f"📂 Static files directory set to: {os.environ['STATIC_FILES_DIR']}")
+
 import uvicorn
 
 from src.backend.config.settings import settings
 from src.backend.main import app
 
 
-def resolve_static_path():
-    """解析静态文件路径（兼容开发环境和打包环境）"""
-    if getattr(sys, "frozen", False):
-        # 打包环境: _internal/static
-        # PyInstaller 在单目录模式下，数据在 _internal 下（如果打包成单文件则在临时目录）
-        return Path(sys.executable).parent / "static"
-    # 开发环境
-    return Path(__file__).resolve().parents[2] / "dist"
-
-
 def main():
     """桌面端启动入口"""
-    # 覆盖静态文件路径检测逻辑 (在 main.py 中已经有处理，这里主要是确保环境变了设置正确)
-    # 实际上 main.py 里的 static_dir = Path("/app/static") 是针对 Docker 的
-    # 我们需要在启动时动态修改这个路径，或者让 main.py 更智能
-
-    # 更好的方式是设置环境变量，让 settings 或 main 读取
-    # 但 main.py 里的 Path("/app/static") 是硬编码的。
-    # 让我们修改 main.py 来支持动态配置静态目录
 
     # 启动浏览器
     host = settings.HOST
     port = settings.PORT
-    url = f"http://{host}:{port}"
+
+    # 浏览器访问地址：优先使用 localhost 以便用户访问
+    access_host = "localhost" if host == "0.0.0.0" else host
+    url = f"http://{access_host}:{port}"
 
     print(f"🚀 Starting Desktop App at {url}")
 
     # 延迟打开浏览器，确保服务已启动
-    # 注意：uvicorn.run 是阻塞的，所以不能在之后运行
-    # 我们可以用 Timer 或者 startup event，或者简单的在 run 之前打开（浏览器会重试或等待）
-
     def open_browser():
         time.sleep(2)  # 等待 2 秒
         webbrowser.open(url)
@@ -50,15 +49,12 @@ def main():
 
     # 启动服务
     # 注意：在 PyInstaller 打包应用中，reload 必须为 False
-    # 针对 Windows 打包环境，确保 DATABASE_URL 是正确的文件路径
-    # 如果是相对路径，需要转换为基于 executable 的绝对路径
+
+    # 修正 SQLite 路径 (Windows 打包环境)
     if getattr(sys, "frozen", False) and "sqlite" in settings.DATABASE_URL:
         db_url = settings.DATABASE_URL
         if db_url.startswith("sqlite://"):
             db_path = db_url.replace("sqlite://", "")
-            # 如果是相对路径 (./data/...)
-            # 注意：这里 db_path 可能是 ./data/db.sqlite3 这样的字符串
-            # 我们只关心它是否是相对路径
             p_db_path = Path(db_path)
             if not p_db_path.is_absolute():
                 # 转换为基于 exe 所在目录的绝对路径

@@ -189,7 +189,7 @@ if static_dir.exists():
         if index_path.exists():
             return FileResponse(index_path)
 
-        return {"error": "Frontend not found"}
+        return {"error": "Frontend not found at " + str(static_dir)}
 
 else:
     # 开发环境根路由
