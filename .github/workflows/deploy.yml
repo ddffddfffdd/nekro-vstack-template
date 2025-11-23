@@ -77,9 +77,7 @@ jobs:
             - name: Build Frontend
               run: |
                   pnpm install --frozen-lockfile
-                  # Windows 构建时 API Base URL 设为相对路径或空，
-                  # 因为桌面版是同源访问 (localhost:9871)
-                  $env:VITE_API_BASE_URL="/api" 
+                  Copy-Item build.env .env.production
                   pnpm build
 
             - name: Install Backend Dependencies
@@ -88,6 +86,11 @@ jobs:
                   uv pip install --system -r pyproject.toml
                   # 单独安装 PyInstaller (如果是开发依赖)
                   pip install pyinstaller
+
+            - name: Generate OpenAPI JSON
+              run: |
+                  $env:PYTHONPATH="."
+                  python scripts/generate-openapi.py
 
             - name: Build Windows EXE
               run: |

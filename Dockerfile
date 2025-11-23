@@ -10,6 +10,7 @@ COPY package.json pnpm-lock.yaml ./
 COPY tsconfig*.json ./
 COPY vite.config.ts postcss.config.js tailwind.config.js ./
 COPY index.html ./
+COPY build.env .env.production
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
@@ -18,9 +19,6 @@ RUN pnpm install --frozen-lockfile
 COPY src ./src
 COPY public ./public
 
-# Build
-# Note: Ensure VITE_API_BASE_URL is relative for same-origin deployment
-ENV VITE_API_BASE_URL=/api
 RUN pnpm build
 
 # Stage 2: Build Backend Environment
