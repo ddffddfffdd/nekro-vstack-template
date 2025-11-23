@@ -88,6 +88,8 @@ jobs:
                   pip install pyinstaller
 
             - name: Generate OpenAPI JSON
+              env:
+                  PYTHONUTF8: 1
               run: |
                   $env:PYTHONPATH="."
                   python scripts/generate-openapi.py
