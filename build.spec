@@ -3,6 +3,7 @@
 from pathlib import Path
 import os
 import sys
+from PyInstaller.utils.hooks import copy_metadata
 
 block_cipher = None
 
@@ -25,6 +26,9 @@ datas = [
     (str(BASE_DIR / "openapi.json"), "."),
 ]
 
+# 修复: 显式复制 tortoise-orm 的元数据，解决 importlib.metadata.PackageNotFoundError
+datas += copy_metadata("tortoise-orm")
+
 # 隐藏导入：Tortoise ORM 和其他动态加载的库可能需要
 hiddenimports = [
     "tortoise.backends.sqlite",
@@ -41,6 +45,12 @@ hiddenimports = [
     "src.features.user.backend.models",
     "src.features.dashboard.backend.models",
     "src.features.monitor.backend.models",
+    # 手动添加 tortoise 模块依赖
+    "tortoise.backends.asyncpg",
+    "tortoise.backends.mysql",
+    "tortoise.contrib.pydantic",
+    # importlib.metadata 兼容性
+    "importlib_metadata",
 ]
 
 a = Analysis(
