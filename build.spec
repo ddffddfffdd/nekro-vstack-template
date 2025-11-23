@@ -62,6 +62,9 @@ hiddenimports = [
     "importlib_metadata",
     # aerich 迁移工具
     "aerich.models",
+    "aerich.ddl.sqlite",
+    "aerich.ddl.mysql",
+    "aerich.ddl.postgres",
 ]
 
 a = Analysis(
