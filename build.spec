@@ -4,8 +4,6 @@ from pathlib import Path
 import os
 import sys
 from PyInstaller.utils.hooks import copy_metadata
-# 引入 Tree 以便更强力地包含目录
-from PyInstaller.building.datastruct import Tree
 
 block_cipher = None
 
@@ -30,13 +28,13 @@ datas = [
 # 修复: 显式复制 tortoise-orm 的元数据，解决 importlib.metadata.PackageNotFoundError
 datas += copy_metadata("tortoise-orm")
 
-# 核心修复: 使用 Tree 强制包含 migrations 目录下的所有文件（包括 .py）作为数据文件
-# 避免 PyInstaller 自动分析过滤掉未被导入的 .py 迁移脚本
+# 核心修复: 包含 migrations 目录下的所有文件
+# 确保 migrations 目录存在且不为空
 migrations_path = BASE_DIR / "migrations"
 if migrations_path.exists():
-    # Tree(src_root, prefix=dest_root)
-    # 这会将 migrations 文件夹下的所有内容完整复制到打包产物的 migrations 目录下
-    datas += [Tree(str(migrations_path), prefix='migrations')]
+    # 直接添加目录元组 (source_dir, dest_dir_name)
+    # PyInstaller 会递归复制整个目录
+    datas.append((str(migrations_path), "migrations"))
 else:
     print(f"Warning: Migrations directory not found at {migrations_path}")
 
