@@ -97,3 +97,11 @@ async def init_db():
     elif is_sqlite and is_frozen:
         # 桌面版生产环境：自动迁移
         await run_migrations()
+
+
+async def close_db():
+    """
+    关闭数据库连接
+    在应用关闭时调用
+    """
+    await Tortoise.close_connections()
