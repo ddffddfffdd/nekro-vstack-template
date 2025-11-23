@@ -1,119 +1,103 @@
-# Nekro VStack
+# Nekro VStack Template ⚡️
 
-**垂直切分的 AI 友好全栈开发模板**
-
-Vertical-Split Full-Stack Template for AI-Powered Development
+> **专为 AI 辅助编程设计的全栈开发模板 · 垂直切分架构 · MacOS 风格 UI**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org)
-[![TypeScript](https://img.shields.io/badge/typescript-5.6+-blue.svg)](https://www.typescriptlang.org)
-[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com)
-[![Windows](https://img.shields.io/badge/windows-native-blue.svg)](https://microsoft.com)
+[![Python](https://img.shields.io/badge/python-3.11+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![TypeScript](https://img.shields.io/badge/typescript-5.6+-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![React](https://img.shields.io/badge/React-18-61DAFB.svg?logo=react&logoColor=white)](https://react.dev)
+[![Docker](https://img.shields.io/badge/docker-ready-2496ED.svg?logo=docker&logoColor=white)](https://www.docker.com)
 
 ---
 
-## ✨ 核心特性
+**Nekro VStack** 是一个旨在最大化 **LLM (大语言模型)** 代码理解与生成效率的现代全栈开发脚手架。它打破了传统的前后端分离代码组织方式，采用 **垂直切分架构 (Vertical Slice Architecture)**，将同一功能的 "前端 UI" 与 "后端逻辑" 物理聚合，显著降低了 AI 上下文检索的开销，让 Feature 开发如搭积木般高效。
 
-- **🏗️ 功能垂直切分** - 前后端代码按功能聚合，优化 AI 理解和检索效率
-- **🔄 类型自动同步** - 后端 OpenAPI → 前端 TypeScript，端到端类型安全
-- **📦 开箱即用** - 数据库、认证、日志、错误处理全配置
-- **🤖 AI 协作优先** - 完整的 AI 开发规范和项目结构设计
-- **🚢 全平台发布** - 支持 Docker 容器化部署和 Windows 原生桌面应用打包
-- **⚙️ 灵活配置** - 所有项目信息可通过环境变量定制
+## ✨ 核心亮点
+
+### 🧠 AI Native 架构
+
+- **垂直切分 (Vertical Slicing)**: 前后端代码按功能聚合在 `src/features/[feature_name]` 下，AI 一次检索即可获取完整上下文。
+- **类型对齐**: 后端 Pydantic 模型与前端 TypeScript 类型通过工具链自动同步，减少幻觉。
+
+### 🎨 极致 UI/UX
+
+- **MacOS 风格**: 深度定制的 MUI v6 主题，内置玻璃拟态 (Glassmorphism)、Inter 字体。
+- **流畅动画**: 集成 Framer Motion，预设平滑的页面过渡和列表交错动画。
+- **自适应主题**: 完美支持 Light/Dark 模式无缝切换。
+
+### 🛠 现代技术栈
+
+- **后端**: FastAPI (Async), Tortoise-ORM, Pydantic v2, uv (极速包管理), SSE 实时推送。
+- **前端**: React 18, React Router v7, Zustand, Vite, Axios。
+- **工程化**: Docker 容器化, GitHub Actions CI/CD, Windows 原生应用打包支持。
 
 ---
 
 ## 🚀 快速开始
 
-```bash
-# 一键初始化
-./scripts/init-project.sh
+### 1. 初始化
 
-# 启动开发环境
+```bash
+# 初始化环境 (检查依赖、生成配置)
+./scripts/init-project.sh
+```
+
+### 2. 启动开发
+
+```bash
+# 启动所有服务 (前端 + 后端)
 pnpm dev:all
 
-# 访问应用
-# 前端: http://localhost:5173
-# API文档: http://localhost:9871/docs
-# 默认账号: admin / admin
+# 或者分别启动
+# pnpm dev:backend
+# pnpm dev:frontend
 ```
+
+### 3. 访问应用
+
+- **Web UI**: `http://localhost:5173`
+- **API Docs**: `http://localhost:9871/docs`
+- **默认账号**: `admin` / `admin`
 
 详细说明：[快速开始指南](./docs/getting-started.md)
 
 ---
 
-## 📚 文档导航
+## 📁 架构概览
 
-完整文档请访问：**[文档中心](./docs/README.md)**
-
-### 🔥 热门文档
-
-- **[快速开始](./docs/getting-started.md)** - 5 分钟上手
-- **[部署指南](./docs/deployment.md)** - Docker / Windows 部署 🆕
-- **[开发指南](./docs/development.md)** - 如何开发新功能
-- **[命令参考](./docs/commands.md)** - 常用命令速查
-- **[AI 协作规范](./.cursor/rules/global.mdc)** - Cursor AI 开发指南
-
-> 更多内容（架构说明、数据库迁移、配置指南等）请查阅 [文档中心](./docs/README.md)。
-
----
-
-## 🎯 技术栈
-
-**后端**: FastAPI + Pydantic v2 + Tortoise-ORM + Aerich + Loguru + PyInstaller  
-**前端**: React 18 + TypeScript 5.6 + Zustand + MUI + React Router v7  
-**工具链**: uv (Python) + pnpm (Node.js) + Vite + Docker + GitHub Actions
-
----
-
-## 📁 项目结构
-
-```
+```text
 src/
-├── features/          # 功能模块（垂直切分）
-│   └── user/
-│       ├── frontend/  # 前端：页面 + API
-│       └── backend/   # 后端：路由 + 模型
-├── backend/core/      # 后端核心（安全、日志）
-└── frontend/
-    ├── core/          # 技术基础设施
-    ├── shared/        # 共享业务逻辑
-    └── utils/         # 工具函数
+├── features/          # 🧩 垂直功能切片 (AI 关注重点)
+│   └── [feature]/
+│       ├── frontend/  # UI 组件 + API Hooks + 状态
+│       └── backend/   # API 路由 + DB 模型 + Schemas
+├── backend/           # ⚙️ 后端核心 (Auth, Logging, Config)
+└── frontend/          # 🖥️ 前端基建 (Router, Theme, Utils)
 ```
 
-详细说明：[架构文档](./docs/architecture.md)
+详细架构说明请参阅 [架构文档](./docs/architecture.md)。
+
+---
+
+## 📚 文档中心
+
+- **[开发指南](./docs/development.md)**: 如何创建一个新 Feature（核心阅读）
+- **[部署指南](./docs/deployment.md)**: Docker 与 Windows 部署
+- **[AI 协作规范](./.cursor/rules/global.mdc)**: Cursor/Copilot 最佳实践
+- **[命令参考](./docs/commands.md)**: 常用命令速查
 
 ---
 
 ## 🤝 贡献
 
-欢迎提交 Issue 和 Pull Request！
+欢迎提交 Issue 和 Pull Request！提交前请确保通过类型检查与 Lint：
 
-提交前请确保：
-
-1. 运行 `pnpm type-check` 通过
-2. 运行 `pnpm lint:backend` 无错误
-3. 遵循开发规范
-4. 更新 CHANGELOG.md
-
----
+```bash
+pnpm type-check
+pnpm lint:backend
+```
 
 ## 📄 License
 
-MIT License - 自由使用、修改和分发
-
----
-
-## 🙏 致谢
-
-本模板设计灵感来源于：
-
-- 垂直切分架构（Feature-Sliced Design）
-- AI 协作开发最佳实践
-- 现代全栈工程化经验
-
----
-
-**Nekro VStack** - 让 AI 成为你的全栈开发伙伴 🤖✨
-
-**快速开始**: `./scripts/init-project.sh`
+MIT © Nekro VStack
