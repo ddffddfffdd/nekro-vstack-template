@@ -3,14 +3,17 @@ FastAPI应用入口
 """
 
 import asyncio
-import json
+import os
 import signal
-from contextlib import asynccontextmanager, suppress
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from starlette.responses import FileResponse
 
 from src.backend.config.database import close_db, init_db
 from src.backend.config.settings import settings
@@ -21,9 +24,7 @@ from src.backend.core.exceptions import (
 )
 from src.backend.core.logger import logger
 from src.backend.core.sse import log_stream_manager
-from src.features.dashboard.backend.router import router as dashboard_router
-from src.features.monitor.backend.router import router as monitor_router
-from src.features.user.backend.router import router as auth_router
+from src.backend.router import api_router
 
 
 @asynccontextmanager
@@ -45,7 +46,7 @@ async def lifespan(_app: FastAPI):
         # 使用 call_soon_threadsafe 确保线程安全
         if loop.is_running():
             loop.call_soon_threadsafe(
-                lambda: asyncio.create_task(log_stream_manager.shutdown())
+                lambda: asyncio.create_task(log_stream_manager.shutdown()),
             )
 
         # 调用原始处理器（如果有）以确保 Uvicorn 也能收到信号
@@ -120,42 +121,88 @@ app.add_middleware(
 
 
 # 异常处理器
-async def api_error_handler(_request: Request, exc: APIError):
+async def api_error_handler(_request: Request, exc: Exception):
     """APIError异常处理器"""
-    from fastapi.responses import JSONResponse
-
+    if isinstance(exc, APIError):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content=exc.detail,
+        )
     return JSONResponse(
-        status_code=exc.status_code,
-        content=exc.detail,
+        status_code=500,
+        content={"detail": "Internal Server Error"},
     )
 
 
 # 注册异常处理器
-app.add_exception_handler(APIError, api_error_handler)  # type: ignore
-app.add_exception_handler(RequestValidationError, validation_exception_handler)  # type: ignore
-app.add_exception_handler(Exception, global_exception_handler)  # type: ignore
+app.add_exception_handler(APIError, api_error_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(Exception, global_exception_handler)
 
-# 注册路由（按功能模块组织）
-app.include_router(auth_router, prefix="/api/auth", tags=["认证"])
-app.include_router(dashboard_router, prefix="/api/dashboard", tags=["仪表盘"])
-app.include_router(monitor_router, prefix="/api/monitor", tags=["系统监控"])
-
-
-@app.get("/")
-async def root():
-    """根路径"""
-    return {
-        "message": settings.APP_NAME,
-        "version": settings.VERSION,
-        "description": settings.APP_DESCRIPTION,
-        "docs": "/docs",
-    }
+# 注册统一路由
+app.include_router(api_router)
 
 
 @app.get("/health")
 async def health_check():
     """健康检查"""
     return {"status": "healthy", "version": settings.VERSION}
+
+
+# 静态文件服务 (仅在存在静态文件目录时启用，通常是生产环境 Docker 容器中)
+# 优先从环境变量获取，否则检查默认 Docker 路径
+static_path_env = os.getenv("STATIC_FILES_DIR")
+if static_path_env:
+    static_dir = Path(static_path_env)
+else:
+    # 默认 Docker 路径
+    static_dir = Path("/app/static")
+
+    # 如果 Docker 路径不存在，尝试检查当前目录下的 static (适应 PyInstaller 打包后的目录结构)
+    if not static_dir.exists():
+        local_static = Path("static")  # 相对于工作目录
+        if local_static.exists():
+            static_dir = local_static.resolve()
+
+if static_dir.exists():
+    # 1. 挂载静态资源目录 (assets)
+    # Vite 默认构建输出包含 assets 目录
+    assets_dir = static_dir / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+
+    # 2. 挂载其他根目录静态文件 (如 favicon.ico, robots.txt)
+    # 注意：我们需要排除 index.html，因为它由 SPA 路由处理
+    # 但 StaticFiles 默认行为是如果请求目录则找 index.html
+
+    # Catch-all for SPA: 必须放在最后
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        """服务 SPA 前端应用"""
+        # 尝试直接访问文件
+        file_path = static_dir / full_path
+        if file_path.exists() and file_path.is_file():
+            return FileResponse(file_path)
+
+        # 默认返回 index.html (SPA 路由)
+        index_path = static_dir / "index.html"
+        if index_path.exists():
+            return FileResponse(index_path)
+
+        return {"error": "Frontend not found"}
+
+else:
+    # 开发环境根路由
+    @app.get("/")
+    async def root():
+        """根路径"""
+        return {
+            "message": settings.APP_NAME,
+            "version": settings.VERSION,
+            "description": settings.APP_DESCRIPTION,
+            "docs": "/docs",
+            "hint": "Frontend is running separately in development mode",
+        }
 
 
 if __name__ == "__main__":

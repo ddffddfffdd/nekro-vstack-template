@@ -71,3 +71,8 @@ select = [
     "TRY",
     "RUF",
 ]
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.16.0",
+]

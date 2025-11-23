@@ -7,6 +7,8 @@ Vertical-Split Full-Stack Template for AI-Powered Development
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org)
 [![TypeScript](https://img.shields.io/badge/typescript-5.6+-blue.svg)](https://www.typescriptlang.org)
+[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com)
+[![Windows](https://img.shields.io/badge/windows-native-blue.svg)](https://microsoft.com)
 
 ---
 
@@ -16,6 +18,7 @@ Vertical-Split Full-Stack Template for AI-Powered Development
 - **🔄 类型自动同步** - 后端 OpenAPI → 前端 TypeScript，端到端类型安全
 - **📦 开箱即用** - 数据库、认证、日志、错误处理全配置
 - **🤖 AI 协作优先** - 完整的 AI 开发规范和项目结构设计
+- **🚢 全平台发布** - 支持 Docker 容器化部署和 Windows 原生桌面应用打包
 - **⚙️ 灵活配置** - 所有项目信息可通过环境变量定制
 
 ---
@@ -26,7 +29,7 @@ Vertical-Split Full-Stack Template for AI-Powered Development
 # 一键初始化
 ./scripts/init-project.sh
 
-# 启动项目
+# 启动开发环境
 pnpm dev:all
 
 # 访问应用
@@ -41,29 +44,25 @@ pnpm dev:all
 
 ## 📚 文档导航
 
-### 入门指南
+完整文档请访问：**[文档中心](./docs/README.md)**
 
-- **[快速开始](./docs/getting-started.md)** - 5 分钟上手 ⭐
-- **[命令参考](./docs/commands.md)** - 所有可用命令
-- **[配置指南](./docs/configuration.md)** - 自定义项目配置
+### 🔥 热门文档
 
-### 深入学习
-
+- **[快速开始](./docs/getting-started.md)** - 5 分钟上手
+- **[部署指南](./docs/deployment.md)** - Docker / Windows 部署 🆕
 - **[开发指南](./docs/development.md)** - 如何开发新功能
-- **[数据库迁移](./docs/database.md)** - 数据库操作详解
-- **[架构说明](./docs/architecture.md)** - 设计理念和技术选型
-
-### AI 开发
-
+- **[命令参考](./docs/commands.md)** - 常用命令速查
 - **[AI 协作规范](./.cursor/rules/global.mdc)** - Cursor AI 开发指南
+
+> 更多内容（架构说明、数据库迁移、配置指南等）请查阅 [文档中心](./docs/README.md)。
 
 ---
 
 ## 🎯 技术栈
 
-**后端**: FastAPI + Pydantic v2 + Tortoise-ORM + Aerich + Loguru  
+**后端**: FastAPI + Pydantic v2 + Tortoise-ORM + Aerich + Loguru + PyInstaller  
 **前端**: React 18 + TypeScript 5.6 + Zustand + MUI + React Router v7  
-**工具链**: uv (Python) + pnpm (Node.js) + Vite + openapi-typescript
+**工具链**: uv (Python) + pnpm (Node.js) + Vite + Docker + GitHub Actions
 
 ---
 
@@ -86,73 +85,6 @@ src/
 
 ---
 
-## 🎓 为什么选择 Nekro VStack？
-
-### 解决的痛点
-
-**传统架构**:
-
-- ❌ 功能代码散落各处，维护困难
-- ❌ 类型需手动同步，易出错
-- ❌ AI 难以理解跨目录关联
-
-**Nekro VStack**:
-
-- ✅ 功能自包含，代码聚合
-- ✅ 类型自动生成，端到端安全
-- ✅ AI 友好设计，高效协作
-
-### 适用场景
-
-- 🚀 快速构建 MVP 产品
-- 🤖 AI 辅助开发的中小型项目
-- 🔒 需要类型安全的企业应用
-- 👥 团队协作的标准化模板
-- 📚 学习全栈开发的参考项目
-
----
-
-## 📝 开发规范
-
-### 路径别名（必须使用）
-
-```typescript
-// ✅ 正确
-import { userAPI } from '@/features/user/frontend'
-import type { User } from '@/frontend/core/types'
-
-// ❌ 禁止相对路径
-import { userAPI } from '../../user/frontend'
-```
-
-### 文件命名
-
-| 类型         | 规范       | 示例              |
-| ------------ | ---------- | ----------------- |
-| Feature 目录 | kebab-case | `user-profile/`   |
-| React 组件   | PascalCase | `UserProfile.tsx` |
-| TypeScript   | camelCase  | `api.ts`          |
-| Python 文件  | snake_case | `user_service.py` |
-
-完整规范：[开发指南](./docs/development.md)
-
----
-
-## 🚢 部署
-
-### 生产环境检查清单
-
-- [ ] 修改 `SECRET_KEY` 为随机值
-- [ ] 设置 `DEBUG=false`
-- [ ] 使用 PostgreSQL 或 MySQL
-- [ ] 配置正确的 `CORS_ORIGINS`
-- [ ] 运行 `pnpm type-check` 通过
-- [ ] 运行 `pnpm lint:backend` 无错误
-
-详细说明：[配置指南](./docs/configuration.md#生产环境)
-
----
-
 ## 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request！
@@ -162,7 +94,7 @@ import { userAPI } from '../../user/frontend'
 1. 运行 `pnpm type-check` 通过
 2. 运行 `pnpm lint:backend` 无错误
 3. 遵循开发规范
-4. 添加必要的文档
+4. 更新 CHANGELOG.md
 
 ---
 

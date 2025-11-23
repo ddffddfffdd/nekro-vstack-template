@@ -3,7 +3,28 @@
 使用pydantic-settings管理环境变量
 """
 
+import tomllib
+from pathlib import Path
+
 from pydantic_settings import BaseSettings
+
+
+def get_version() -> str:
+    """从 pyproject.toml 读取版本号"""
+    try:
+        # 假设项目结构: root/src/backend/config/settings.py
+        # root/pyproject.toml
+        root_dir = Path(__file__).resolve().parents[3]
+        pyproject_path = root_dir / "pyproject.toml"
+
+        if not pyproject_path.exists():
+            return "0.1.0"
+
+        with pyproject_path.open("rb") as f:
+            data = tomllib.load(f)
+            return data.get("project", {}).get("version", "0.1.0")
+    except Exception:
+        return "0.1.0"
 
 
 class Settings(BaseSettings):
@@ -14,7 +35,7 @@ class Settings(BaseSettings):
     APP_DESCRIPTION: str = "垂直切分的 AI 友好全栈开发模板"
     ENVIRONMENT: str = "development"  # development, production, test
     DEBUG: bool = False
-    VERSION: str = "0.1.0"
+    VERSION: str = get_version()
 
     # 服务器配置
     HOST: str = "0.0.0.0"

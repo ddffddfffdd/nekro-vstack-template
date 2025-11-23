@@ -18,6 +18,8 @@
 
 ### ⚙️ 配置与部署
 
+- **[部署指南](./deployment.md)** - Docker 部署、Windows 运行与仓库配置 🆕
+- **[发布工作流](./release-workflow.md)** - 版本发布 CI/CD 流程详解 🆕
 - **[配置指南](./configuration.md)** - 环境变量和项目配置
 - **[架构说明](./architecture.md)** - 设计理念和技术选型
 
@@ -35,6 +37,8 @@ docs/
 ├── getting-started.md     # 快速开始
 ├── development.md         # 开发指南
 ├── database.md            # 数据库迁移
+├── deployment.md          # 部署指南 (Docker/Windows)
+├── release-workflow.md    # 发布工作流 (CI/CD)
 ├── configuration.md       # 配置说明
 ├── commands.md            # 命令参考
 └── architecture.md        # 架构设计
@@ -48,6 +52,12 @@ docs/
 
 **启动项目**  
 → [快速开始](./getting-started.md)
+
+**部署上线**  
+→ [部署指南](./deployment.md)
+
+**发布新版本**  
+→ [发布工作流](./release-workflow.md)
 
 **添加新功能**  
 → [开发指南 - 添加新功能](./development.md#添加新功能)
@@ -76,6 +86,12 @@ docs/
 1. [快速开始](./getting-started.md) - 启动项目
 2. [开发指南](./development.md) - 学习开发流程
 3. [命令参考](./commands.md) - 掌握常用命令
+
+### 运维与部署
+
+1. [部署指南](./deployment.md) - 掌握部署方法
+2. [发布工作流](./release-workflow.md) - 理解自动化流程
+3. [配置指南](./configuration.md) - 生产环境配置
 
 ### 深入学习
 
@@ -106,6 +122,8 @@ docs/
 - [uv](https://github.com/astral-sh/uv) - Python 包管理
 - [pnpm](https://pnpm.io/) - Node.js 包管理
 - [Vite](https://vitejs.dev/) - 前端构建工具
+- [PyInstaller](https://pyinstaller.org/) - 打包工具
+- [GitHub Actions](https://docs.github.com/en/actions) - CI/CD
 
 ---
 
@@ -122,8 +140,8 @@ docs/
 
 ## 📞 获取帮助
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/nekro-vstack/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/nekro-vstack/discussions)
+- **Issues**: [GitHub Issues](https://github.com/nekroai/nekro-vstack-template/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/nekroai/nekro-vstack-template/discussions)
 
 ---
 

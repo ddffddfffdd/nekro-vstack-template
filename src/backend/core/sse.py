@@ -128,10 +128,10 @@ class LogStreamManager:
         async for msg in self.sse_manager.subscribe():
             yield msg
 
-    async def shutdown(self):
+    async def shutdown(self) -> None:
         """关闭日志流服务"""
         await self.sse_manager.shutdown()
 
 
 # 全局单例
-log_stream_manager = LogStreamManager()
+log_stream_manager: LogStreamManager = LogStreamManager()

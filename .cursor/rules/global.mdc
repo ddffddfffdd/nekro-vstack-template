@@ -168,6 +168,23 @@ try {
 | TypeScript   | camelCase  | `api.ts`          |
 | Python       | snake_case | `user_service.py` |
 
+### 5. 路径操作 (Python)
+
+**强制使用 `pathlib.Path`**，禁止直接使用 `open()`。
+
+```python
+from pathlib import Path
+
+# ✅ 正确
+file_path = Path("data/file.txt")
+with file_path.open("r") as f:
+    content = f.read()
+
+# ❌ 禁止
+with open("data/file.txt", "r") as f:
+    content = f.read()
+```
+
 ---
 
 ## 快速命令
