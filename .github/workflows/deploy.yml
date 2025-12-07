@@ -131,12 +131,27 @@ jobs:
           name: windows-build
           path: release-assets
 
-      - name: Extract Changelog for Current Version
-        id: changelog
+      - name: Extract Version from pyproject.toml
+        id: version
         run: |
-          # 提取当前 tag 版本号 (去掉 v 前缀)
-          VERSION=${GITHUB_REF#refs/tags/v}
+          # 从 pyproject.toml 提取版本号 (唯一真实来源)
+          VERSION=$(grep -oP '^version = "\K[^"]+' pyproject.toml)
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Extracted version from pyproject.toml: $VERSION"
+
+          # 验证 tag 和 pyproject.toml 版本是否匹配
+          TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          if [ "$VERSION" != "$TAG_VERSION" ]; then
+              echo "ERROR: Version mismatch!"
+              echo "  pyproject.toml version: $VERSION"
+              echo "  Git tag version: $TAG_VERSION"
+              echo "Please ensure pyproject.toml version matches the git tag."
+              exit 1
+          fi
+
+      - name: Extract Changelog for Current Version
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
 
           # 从 CHANGELOG.md 提取当前版本的更新内容
           # 使用 awk 提取 ## [VERSION] 到下一个 ## 之间的内容
